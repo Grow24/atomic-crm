@@ -1,0 +1,16 @@
+.git
+.github
+.claude
+.devcontainer
+.harness
+.doc
+doc
+e2e
+dist
+node_modules
+.supabase-e2e
+*.md
+playwright-report
+test-results
+.playwright-mcp
+.husky
