@@ -1,5 +1,5 @@
-# Zeabur Git deploy requires a Dockerfile (auto-detect is not available
-# for this Git source). Multi-stage: Vite build, then nginx for the SPA.
+# Zeabur Git deploy requires a Dockerfile.
+# Same idea as local `make prod-start`: Vite build, then `serve` the dist folder.
 # Docs: https://zeabur.com/docs/en-US/deploy/methods/dockerfile
 
 FROM node:22-alpine AS builder
@@ -11,8 +11,8 @@ RUN npm ci --ignore-scripts
 
 COPY . .
 
-# Vite bakes these into the bundle at build time. Zeabur injects matching
-# service Variables as ARGs on multi-stage builds.
+# Vite bakes these into the JS bundle at build time. Set the same names
+# as Zeabur Variables so the cloud app talks to hosted Supabase.
 ARG VITE_SUPABASE_URL
 ARG VITE_SB_PUBLISHABLE_KEY
 ARG VITE_IS_DEMO=false
@@ -25,16 +25,24 @@ ENV VITE_SUPABASE_URL=$VITE_SUPABASE_URL \
     VITE_INBOUND_EMAIL=$VITE_INBOUND_EMAIL \
     CI=true
 
+RUN if [ -z "$VITE_SUPABASE_URL" ] || [ -z "$VITE_SB_PUBLISHABLE_KEY" ]; then \
+      echo "Missing VITE_SUPABASE_URL or VITE_SB_PUBLISHABLE_KEY. Add them in Zeabur Variables, then Redeploy." >&2; \
+      exit 1; \
+    fi
+
 RUN npm run build
 
-FROM nginx:alpine
+FROM node:22-alpine
 
-COPY nginx.conf /etc/nginx/conf.d/configfile.template
-COPY --from=builder /app/dist /usr/share/nginx/html
+WORKDIR /app
+RUN npm install -g serve@14
+COPY --from=builder /app/dist ./dist
 
 ENV PORT=8080 \
-    HOST=0.0.0.0
+    HOST=0.0.0.0 \
+    NODE_ENV=production
 
 EXPOSE 8080
 
-CMD sh -c "envsubst '\$PORT' < /etc/nginx/conf.d/configfile.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+# `-s` keeps React Router working (same as opening /contacts, /login).
+CMD ["sh", "-c", "serve -s dist -l tcp://0.0.0.0:${PORT}"]
