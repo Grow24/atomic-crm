@@ -138,14 +138,24 @@ export const LoginPage = (props: { redirectTo?: string }) => {
               </SSOAuthButton>
             ) : null}
             {disableEmailPasswordAuthentication ? null : (
-              <Link
-                to={"/forgot-password"}
-                className="block text-sm text-center hover:underline"
-              >
-                {translate("ra-supabase.auth.forgot_password", {
-                  _: "Forgot password?",
-                })}
-              </Link>
+              <div className="flex flex-col gap-2">
+                <Link
+                  to="/sign-up"
+                  className="block text-sm text-center hover:underline"
+                >
+                  {translate("crm.auth.sign_up", {
+                    _: "Sign up",
+                  })}
+                </Link>
+                <Link
+                  to={"/forgot-password"}
+                  className="block text-sm text-center hover:underline"
+                >
+                  {translate("ra-supabase.auth.forgot_password", {
+                    _: "Forgot password?",
+                  })}
+                </Link>
+              </div>
             )}
           </div>
         </div>

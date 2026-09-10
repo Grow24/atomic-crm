@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import { useDataProvider, useLogin, useNotify, useTranslate } from "ra-core";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { Navigate, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -86,11 +86,6 @@ export const SignupPage = () => {
     return <LoginSkeleton />;
   }
 
-  // For the moment, we only allow one user to sign up. Other users must be created by the administrator.
-  if (isInitialized) {
-    return <Navigate to="/login" />;
-  }
-
   const onSubmit: SubmitHandler<SignUpData> = async (data) => {
     mutate(data);
   };
@@ -114,9 +109,13 @@ export const SignupPage = () => {
             })}
           </h1>
           <p className="text-base mb-4">
-            {translate("crm.auth.signup.create_first_user", {
-              _: "Create the first user account to complete the setup.",
-            })}
+            {isInitialized
+              ? translate("crm.auth.signup.create_account_hint", {
+                  _: "Create an account to get started.",
+                })
+              : translate("crm.auth.signup.create_first_user", {
+                  _: "Create the first user account to complete the setup.",
+                })}
           </p>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="flex flex-col gap-2">
@@ -188,6 +187,12 @@ export const SignupPage = () => {
                   })}
                 </SSOAuthButton>
               ) : null}
+              <Link
+                to="/login"
+                className="block text-sm text-center hover:underline"
+              >
+                {translate("ra.auth.sign_in", { _: "Sign in" })}
+              </Link>
             </div>
           </form>
         </div>
