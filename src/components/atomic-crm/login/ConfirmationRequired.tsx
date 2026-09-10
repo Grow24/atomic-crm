@@ -1,5 +1,7 @@
-import { Notification } from "@/components/admin/notification";
 import { useTranslate } from "ra-core";
+import { Link } from "react-router";
+import { Notification } from "@/components/admin/notification";
+import { Button } from "@/components/ui/button";
 import { useConfigurationContext } from "../root/ConfigurationContext";
 
 export const ConfirmationRequired = () => {
@@ -29,6 +31,16 @@ export const ConfirmationRequired = () => {
               _: "Please follow the link we just sent you by email to confirm your account.",
             })}
           </p>
+          <p className="text-sm text-muted-foreground mb-2">
+            {translate("crm.auth.confirmation_sign_in_hint", {
+              _: "Didn't get the email? Sign in with the password you just created.",
+            })}
+          </p>
+          <Button asChild className="w-full">
+            <Link to="/login">
+              {translate("ra.auth.sign_in", { _: "Sign in" })}
+            </Link>
+          </Button>
         </div>
       </div>
       <Notification />

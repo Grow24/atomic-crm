@@ -382,6 +382,8 @@ export const frenchCrmMessages = {
       confirm_password: "Confirmer le mot de passe",
       confirmation_required:
         "Veuillez suivre le lien que nous venons de vous envoyer par email pour confirmer votre compte.",
+      confirmation_sign_in_hint:
+        "Vous n'avez pas reçu l'e-mail ? Connectez-vous avec le mot de passe que vous venez de créer.",
       recovery_email_sent:
         "Si vous êtes un utilisateur enregistré, vous devriez recevoir prochainement un e-mail de récupération de mot de passe.",
       sign_in_failed: "Échec de la connexion.",

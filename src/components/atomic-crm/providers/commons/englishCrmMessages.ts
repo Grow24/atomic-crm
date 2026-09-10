@@ -376,6 +376,8 @@ export const englishCrmMessages = {
       confirm_password: "Confirm password",
       confirmation_required:
         "Please follow the link we just sent you by email to confirm your account.",
+      confirmation_sign_in_hint:
+        "Didn't get the email? Sign in with the password you just created.",
       recovery_email_sent:
         "If you're a registered user, you should receive a password recovery email shortly.",
       sign_in_failed: "Failed to log in.",

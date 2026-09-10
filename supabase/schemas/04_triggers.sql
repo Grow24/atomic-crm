@@ -71,6 +71,11 @@ create or replace trigger on_deal_notes_deleted_delete_note_attachments
     for each row execute function public.cleanup_note_attachments();
 
 -- Auth triggers: sync auth.users to public.sales
+-- Confirm the first user before insert so signup works without SMTP.
+create or replace trigger on_auth_user_created_confirm_first
+    before insert on auth.users
+    for each row execute function public.confirm_first_user_email();
+
 create or replace trigger on_auth_user_created
     after insert on auth.users
     for each row execute function public.handle_new_user();

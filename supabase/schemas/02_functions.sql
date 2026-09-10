@@ -53,6 +53,20 @@ CREATE OR REPLACE FUNCTION "public"."cleanup_note_attachments"() RETURNS "trigge
     END;
     $$;
 
+CREATE OR REPLACE FUNCTION "public"."confirm_first_user_email"() RETURNS "trigger"
+    LANGUAGE "plpgsql" SECURITY DEFINER
+    SET "search_path" TO ''
+    AS $$
+begin
+  -- First signup cannot wait on SMTP. Confirm immediately so setup can finish.
+  if new.email_confirmed_at is null
+     and not exists (select 1 from public.sales limit 1) then
+    new.email_confirmed_at = now();
+  end if;
+  return new;
+end;
+$$;
+
 CREATE OR REPLACE FUNCTION "public"."get_avatar_for_email"("email" "text") RETURNS "text"
     LANGUAGE "plpgsql"
     SET "search_path" TO 'public'

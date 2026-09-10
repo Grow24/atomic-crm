@@ -14,6 +14,10 @@ grant all on function public.cleanup_note_attachments() to anon;
 grant all on function public.cleanup_note_attachments() to authenticated;
 grant all on function public.cleanup_note_attachments() to service_role;
 
+grant all on function public.confirm_first_user_email() to anon;
+grant all on function public.confirm_first_user_email() to authenticated;
+grant all on function public.confirm_first_user_email() to service_role;
+
 grant all on function public.get_avatar_for_email(text) to anon;
 grant all on function public.get_avatar_for_email(text) to authenticated;
 grant all on function public.get_avatar_for_email(text) to service_role;
