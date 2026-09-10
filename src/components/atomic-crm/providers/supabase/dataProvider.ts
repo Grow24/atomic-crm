@@ -96,6 +96,7 @@ const getDataProviderWithCustomMethods = () => {
             first_name,
             last_name,
           },
+          emailRedirectTo: `${window.location.origin}/auth-callback.html`,
         },
       });
 

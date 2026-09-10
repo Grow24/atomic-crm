@@ -29,6 +29,16 @@
     <link rel="apple-touch-icon" sizes="192x192" href="./appIcon/192.png" />
     <link rel="apple-touch-icon" sizes="1024x1024" href="./appIcon/1024.png" />
     <title>Atomic CRM</title>
+    <script>
+      // HashRouter cannot treat Supabase implicit-grant tokens as a route.
+      // Forward #access_token=... to the dedicated callback page.
+      (function () {
+        var hash = window.location.hash;
+        if (hash.indexOf("#access_token=") === 0) {
+          window.location.replace("./auth-callback.html" + hash);
+        }
+      })();
+    </script>
 
     <style>
       body {
